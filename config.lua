@@ -1,11 +1,13 @@
 Config = Config or {}
 
 
-Config.MinPolice = 2
+Config.MinPolice = 0
 
 Config.Inventory = "ox" -- qb / ox
 
 Config.Target = "ox"    -- qb or ox
+
+Config.Debug = false
 
 Config.RegisterSearchTime = 25000
 
@@ -25,11 +27,6 @@ Config.Prize = {
             min = 1,
             max = 5,
             chance = 20
-        },
-        ['moneybag'] = {
-            min = 1,
-            max = 2,
-            chance = 10
         }
     }
 }
@@ -357,7 +354,7 @@ Config.Store = {
                 rotation = 266.25,
             },
             [2] = {
-                coords = vec3(2548.85, 387.4, 108.65),
+                coords = vec3(2548.85, 387.4, 108.65),               ------- vec3(24.39, -1344.96, 29.5)
                 size = vec3(0.6, 0.4, 1.7),
                 rotation = 266.5,
             },

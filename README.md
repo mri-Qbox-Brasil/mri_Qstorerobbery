@@ -3,7 +3,7 @@
 Dependencies:
 
 - ox lib
-- [ran minigames](https://github.com/RanDXDev/ran-minigames)
+- [ran minigames](https://github.com/RanDXDev/mri_Qminigames)
 - qb-core
 
 | Icon | Description   |

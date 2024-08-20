@@ -22,10 +22,10 @@ local function Alert(id)
     if cfg?.hack?.delayCount then
         SetTimeout(1000 * cfg.hack.delayCount, function()
             SendDispatch()
-            Functions.Notify("The police has been notified", "error")
+            Functions.Notify("Policia Notificada", "error")
         end)
     else
-        Functions.Notify("The police has been notified", "error")
+        Functions.Notify("Policia Notificada", "error")
         SendDispatch()
     end
 end
@@ -92,11 +92,11 @@ end
 local function RobRegistar()
     if not CurrentStore then return end
     if not RegZoneID or not InRegZone then
-        Functions.Notify("You need to stand in front of cashier", "error")
+        Functions.Notify("YPrecisa estar de frente para o caixa", "error")
         return
     end
     if Config.MinPolice > CopCount then
-        Functions.Notify("Not enough cops", "error")
+        Functions.Notify("Não tem policiais", "error")
         return
     end
     local ped = cache.ped
@@ -119,7 +119,7 @@ local function RobRegistar()
 
     if lib.progressCircle({
             duration = Config.RegisterSearchTime,
-            label = 'Rummaging For Cash',
+            label = 'Procurando dinheiro',
             position = 'bottom',
             useWhileDead = false,
             canCancel = true,
@@ -128,7 +128,7 @@ local function RobRegistar()
                 move = true,
             },
         }) then
-        local success = exports['ran-minigames']:MineSweep(prize, 10, 3, "left")
+        local success = exports['mri_Qminigames']:MineSweep(prize, 10, 3, "left")
         if success then
             local itemLabel = Functions.GetItemLabel(Config.Prize.item)
             lib.callback("ran-houserobbery:server:getPrize", false, function(cb)
@@ -149,7 +149,7 @@ local EData = nil
 
 local function SearchCombination(storeid, sid)
     if Config.MinPolice > CopCount then
-        Functions.Notify("Not enough police", "error")
+        Functions.Notify("Sem Policiais no Momento", "error")
         return
     end
     local config = Config.Store[storeid]
@@ -158,34 +158,34 @@ local function SearchCombination(storeid, sid)
     if not searchLoc then return end
     if config.cooldown then return end
     if config.combination then
-        return Functions.Notify("You already got the combination...", "error")
+        return Functions.Notify("Você já tem a combinação...", "error")
     end
     if searchLoc.searched then
-        return Functions.Notify("You already search this place...", "error")
+        return Functions.Notify("Você já pesquisou este lugar...", "error")
     end
     Alert(storeid)
     if searchLoc.iscomputer then
         if not AllStashSearched(storeid) then
-            return Functions.Notify("You need to search all the cabinet first...", "error")
+            return Functions.Notify("Você precisa pesquisar todo o gabinete primeiro...", "error")
         end
         local animdict = 'anim@scripted@player@mission@tunf_bunk_ig3_nas_upload@'
         local anim     = 'normal_typing'
         lib.requestAnimDict(animdict)
         TaskPlayAnim(cache.ped, animdict, anim, 8.0, 8.0, -1, 1, 1.0, false, false, false)
-        local success = exports['ran-minigames']:OpenTerminal()
+        local success = exports['mri_Qminigames']:OpenTerminal()
         if success then
             local canGet = math.random(1, 100) > 20 and true or false
             if canGet then
                 local TimeToWait = math.random(20, 30)
                 searchLoc.searched = true
-                Functions.Notify("You need to wait " .. TimeToWait .. " seconds, to decrypt the code")
+                Functions.Notify("Você Precisa Esperar " .. TimeToWait .. " segundos, para decodificar")
                 SetTimeout(1000 * TimeToWait, function()
                     lib.callback.await("ran-storerobbery:server:combination", false, storeid, sid, true)
-                    Functions.Notify("You got the combination key")
+                    Functions.Notify("Você já tem a Combinação")
                 end)
             else
                 lib.callback.await("ran-storerobbery:server:combination", false, storeid, sid, false)
-                Functions.Notify("Unable to get any information about pin from this computer", "error")
+                Functions.Notify("Não foi possível obter nenhuma informação sobre o PIN deste computador", "error")
             end
         end
         ClearPedTasks(cache.ped)
@@ -194,7 +194,7 @@ local function SearchCombination(storeid, sid)
                 duration = 5000,
                 position = "bottom",
                 useWhileDead = false,
-                label = "Searching combination",
+                label = "Procurando combinação",
                 canCancel = true,
                 disable = {
                     car = true
@@ -207,9 +207,9 @@ local function SearchCombination(storeid, sid)
             local canGet = math.random(1, 100) > 90 and true or false
             lib.callback.await("ran-storerobbery:server:combination", false, storeid, sid, canGet)
             if canGet then
-                Functions.Notify("You got the combination key")
+                Functions.Notify("Você precisa da combinação")
             else
-                Functions.Notify("You didn't get anything")
+                Functions.Notify("Você não recebeu nada")
             end
             ClearPedTasks(cache.ped)
         else
@@ -242,7 +242,7 @@ local function SetupStore(id)
     local function Hack()
         if cfg.hack.isusing then return end
         if cfg.cooldown then return end
-        local success = exports['ran-minigames']:MemoryCard()
+        local success = exports['mri_Qminigames']:MemoryCard()
         TriggerServerEvent("ran-storerobbery:server:setHackUse", id, true)
         if success then
             TriggerServerEvent("ran-houserobbery:server:setHackedState", id, true)
@@ -260,14 +260,14 @@ local function SetupStore(id)
         })
         if not input then return end
         if not input[1] then
-            return Functions.Notify("You need to fill the pin...", "error")
+            return Functions.Notify("Você precisa preencher o pin...", "error")
         end
         local num = tonumber(input[1])
         if num == cfg.combination then
             lib.callback.await("ran-storerobbery:server:setSafeState", false, CurrentStore, true)
-            return Functions.Notify("You unlocked the safe", "success")
+            return Functions.Notify("Você desbloqueou o cofre", "success")
         else
-            return Functions.Notify("Wrong pin number...", "error")
+            return Functions.Notify("Numero Errado...", "error")
         end
     end
     local function InsideSafe(self)
@@ -328,7 +328,8 @@ local function SetupStore(id)
                 coords = cfg.hack.coords,
                 size = cfg.hack.size,
                 rotation = cfg.hack.rotation,
-                options = options
+                options = options,
+                debug = Config.Debug
             })
         end
     end
@@ -341,7 +342,7 @@ local function SetupStore(id)
                 options = {
                     {
                         label = "Search for combination",
-                        distance = 2.0,
+                        distance = 5.0,
                         icon = "fa-solid fa-magnifying-glass",
                         canInteract = function()
                             return not cfg.combination and not cfg.cooldown
@@ -349,7 +350,7 @@ local function SetupStore(id)
                     },
                     {
                         label = "Look at the combination",
-                        distance = 2.0,
+                        distance = 5.0,
                         icon = "fa-solid fa-computer",
                         canInteract = function()
                             return cfg.search[k].founded and AllStashSearched(id) and not cfg.cooldown
@@ -362,7 +363,7 @@ local function SetupStore(id)
                     end
                     options[1].item = Config.HackItem
                     options[2].action = function()
-                        Functions.Notify("The pin is " .. cfg.combination)
+                        Functions.Notify("O PIN é " .. cfg.combination)
                     end
                 elseif Config.Target == "ox" then
                     options[1].onSelect = function()
@@ -372,14 +373,14 @@ local function SetupStore(id)
                         [Config.HackItem] = 1
                     }
                     options[2].onSelect = function()
-                        Functions.Notify("The pin is " .. cfg.combination)
+                        Functions.Notify("O PIN é " .. cfg.combination)
                     end
                 end
             else
                 options = {
                     {
-                        label = "Search for combination",
-                        distance = 1.0,
+                        label = "Procurar Combinação",
+                        distance = 2.0,
                         icon = "fa-solid fa-magnifying-glass",
                         canInteract = function()
                             return not cfg.combination and not cfg.cooldown
@@ -416,7 +417,7 @@ local function SetupStore(id)
                     rotation = v.rotation,
                     options = options,
                     drawSprite = false,
-
+                    debug = Config.Debug
                 })
             end
         end
@@ -563,7 +564,7 @@ end)
 CreateThread(function()
     local options = {
         {
-            label = "Grab Cash",
+            label = "Roubar Caixa",
             canInteract = function(entity, distance, coords, name, bone)
                 return entity and GetEntityHealth(entity) < 1000 and CurrentStore and not Config.Store[CurrentStore]
                     .cooldown
