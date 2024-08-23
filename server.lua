@@ -251,8 +251,8 @@ lib.callback.register("ran-storerobbery:server:setSafeState", function(_, storei
     return true
 end)
 
-lib.addCommand("reset-store", {
-    help = "Reset Store (Store Robbery)"
+lib.addCommand("liberar", {
+    help = "Liberar (Roubo à Loja)"
 }, function(source)
     if source == 0 or not source then return end
     local job = Functions.GetJob(source)
@@ -281,9 +281,9 @@ end)
 
 Functions.CreateUseableItem('stickynote', function(src, item)
     if item.info then
-        Functions.NotifyClient(src, "Combination: " .. item.info.combination)
+        Functions.NotifyClient(src, "PIN: " .. item.info.combination)
     elseif item.metadata then
-        Functions.NotifyClient(src, "Combination: " .. item.metadata.combination)
+        Functions.NotifyClient(src, "PIN: " .. item.metadata.combination)
     end
 end)
 

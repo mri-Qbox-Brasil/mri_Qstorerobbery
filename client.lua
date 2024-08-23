@@ -22,10 +22,10 @@ local function Alert(id)
     if cfg?.hack?.delayCount then
         SetTimeout(1000 * cfg.hack.delayCount, function()
             SendDispatch()
-            Functions.Notify("Policia Notificada", "error")
+            Functions.Notify("As autoridades foram alertadas!", "error")
         end)
     else
-        Functions.Notify("Policia Notificada", "error")
+        Functions.Notify("As autoridades foram alertadas!", "error")
         SendDispatch()
     end
 end
@@ -40,8 +40,8 @@ local function DrawText3D(x, y, z, text)
     AddTextComponentString(text)
     SetDrawOrigin(x, y, z, 0)
     DrawText(0.0, 0.0)
-    local factor = (string.len(text)) / 370
-    DrawRect(0.0, 0.0 + 0.0125, 0.017 + factor, 0.03, 0, 0, 0, 75)
+    -- local factor = (string.len(text)) / 370
+    -- DrawRect(0.0, 0.0 + 0.0125, 0.017 + factor, 0.03, 0, 0, 0, 75)
     ClearDrawOrigin()
 end
 
@@ -252,15 +252,15 @@ local function SetupStore(id)
         TriggerServerEvent("ran-storerobbery:server:setHackUse", id, false)
     end
     local function OpenPinPrompt()
-        local input = lib.inputDialog("Pin", {
+        local input = lib.inputDialog("PIN", {
             {
                 type = 'number',
-                label = "Pin Number",
+                label = "Digite a senha:",
             }
         })
         if not input then return end
         if not input[1] then
-            return Functions.Notify("Você precisa preencher o pin...", "error")
+            return Functions.Notify("Você precisa preencher o PIN...", "error")
         end
         local num = tonumber(input[1])
         if num == cfg.combination then
@@ -276,9 +276,9 @@ local function SetupStore(id)
         ---@type vector3
         local coords = self.coords
         if cfg.safe.isopened then
-            DrawText3D(coords.x, coords.y, coords.z, "[~g~E~w~] Open Safe")
+            DrawText3D(coords.x, coords.y, coords.z-0.4, "🔓")
         else
-            DrawText3D(coords.x, coords.y, coords.z, "[~r~E~w~] Try pin")
+            DrawText3D(coords.x, coords.y, coords.z-0.4, "🔒")
         end
         if IsControlJustPressed(0, 46) then
             if cfg.safe.isopened and cfg.safe.id then
@@ -341,7 +341,7 @@ local function SetupStore(id)
             if v.iscomputer then
                 options = {
                     {
-                        label = "Search for combination",
+                        label = "Vasculhar",
                         distance = 5.0,
                         icon = "fa-solid fa-magnifying-glass",
                         canInteract = function()
@@ -349,7 +349,7 @@ local function SetupStore(id)
                         end,
                     },
                     {
-                        label = "Look at the combination",
+                        label = "Ver senha do cofre",
                         distance = 5.0,
                         icon = "fa-solid fa-computer",
                         canInteract = function()
@@ -379,7 +379,7 @@ local function SetupStore(id)
             else
                 options = {
                     {
-                        label = "Procurar Combinação",
+                        label = "Vasculhar",
                         distance = 2.0,
                         icon = "fa-solid fa-magnifying-glass",
                         canInteract = function()
@@ -477,8 +477,8 @@ local function ConfigContext()
     local opts = {}
     for k, v in pairs(Config.Store) do
         opts[#opts + 1] = {
-            title = ("Config Number: [%s] %s"):format(k, CurrentStore == k and "| Current Store" or " "),
-            description = ("Hack: %s  | Register: %s  | Robbed: %s"):format(
+            title = ("ID: [%s] %s"):format(k, CurrentStore == k and "| Loja atual" or " "),
+            description = ("Hack: %s  | Registradora: %s  | Roubado: %s"):format(
                 v.hack and true or false,
                 #v.registar,
                 v.alerted or false),
@@ -508,16 +508,16 @@ lib.callback.register("ran-storerobbery:client:resetStore", function()
     local cfg = Config.Store[CurrentStore]
     if not cfg then return end
     if cfg.cooldown then
-        Functions.Notify("This store is already on cooldown", "error")
+        Functions.Notify("Esta loja já está em cooldown", "error")
         return
     end
     if not cfg.alerted then
-        Functions.Notify("This store is not even robbed...", "error")
+        Functions.Notify("Esta loja nem sequer está roubada...", "error")
         return
     end
     local alert = lib.alertDialog({
-        header = "Confirmation",
-        content = "Are you sure you want to reset the store?",
+        header = "Confirmação",
+        content = "Tem certeza de que deseja liberar a loja?",
         centered = true,
         cancel = true
     })

@@ -9,7 +9,7 @@ Config.Target = "ox"    -- qb or ox
 
 Config.Debug = false
 
-Config.RegisterSearchTime = 25000
+Config.RegisterSearchTime = 1000
 
 Config.HackItem = "trojan_usb"
 
